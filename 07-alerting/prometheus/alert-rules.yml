@@ -1,0 +1,57 @@
+groups:
+  - name: node-alerts
+    rules:
+
+      - alert: HighCPUUsage
+        expr: |
+          100 * (
+            1 -
+            avg by(instance) (
+              rate(
+                node_cpu_seconds_total{mode="idle"}[5m]
+              )
+            )
+          ) > 80
+        for: 2m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "High CPU usage on {{ $labels.instance }}"
+          description: "CPU usage is above 80% for more than 2 minutes."
+
+      - alert: HighMemoryUsage
+        expr: |
+          100 * (
+            1 -
+            node_memory_MemAvailable_bytes
+            /
+            node_memory_MemTotal_bytes
+          ) > 80
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "High memory usage on {{ $labels.instance }}"
+          description: "Memory usage is above 80%."
+
+      - alert: TargetDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+          team: platform
+        annotations:
+          summary: "Target {{ $labels.instance }} is down"
+          description: "{{ $labels.job }} has been down for more than 1 minute."
+
+      - alert: CAdvisorDown
+        expr: up{job="cadvisor"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          team: platform
+        annotations:
+          summary: "cAdvisor is down on {{ $labels.instance }}"
+          description: "The cAdvisor target is unavailable."

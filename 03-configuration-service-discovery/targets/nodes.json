@@ -1,0 +1,11 @@
+[
+  {
+    "targets": [
+      "<TARGET_PRIVATE_IP>:9100"
+    ],
+    "labels": {
+      "environment": "lab",
+      "team": "students"
+    }
+  }
+]

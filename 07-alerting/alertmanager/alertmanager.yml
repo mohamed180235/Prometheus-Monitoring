@@ -1,0 +1,24 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: default
+  group_by:
+    - alertname
+    - instance
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+
+  routes:
+    - matchers:
+        - severity="critical"
+      receiver: critical-alerts
+
+receivers:
+  - name: default
+
+  - name: critical-alerts
+
+# Add a real receiver only in your local/private configuration.
+# Never commit webhook URLs, API tokens, or credentials.

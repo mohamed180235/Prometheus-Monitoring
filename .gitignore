@@ -1,0 +1,14 @@
+*.pem
+*.key
+.env
+.env.*
+secrets/
+*.secret
+.DS_Store
+.vscode/
+.idea/
+__pycache__/
+*.log
+*.tfstate
+*.tfstate.*
+.terraform/
