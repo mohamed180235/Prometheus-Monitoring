@@ -18,60 +18,33 @@ Monitoring is the process of collecting, analyzing, and using information to tra
 ### The Shift to Observability
 In dynamic microservice and containerized environments, systems fail in complex, unpredictable ways. **Observability** measures how well internal states can be inferred from external outputs (telemetry). It answers the underlying diagnostic question: **"Why is the system failing?"**
 
-```text
-Application / Host
-       │
-       ▼
-   Exporter
-       │ /metrics
-       ▼
- Prometheus
-       │
-       ├── PromQL
-       │
-       ▼
-   Grafana
+## 2. Metrics vs. Logs vs. Traces
 
-Prometheus alerts
-       │
-       ▼
- Alertmanager
-```
+To achieve complete observability, systems rely on three distinct telemetry data types:
 
-## Metric Types Demo
+| Telemetry Type | Definition | Primary Use Case | Example | Pros & Cons |
+| :--- | :--- | :--- | :--- | :--- |
+| **Metrics** | Numeric values aggregated over time intervals representing system state. | Alerting, real-time dashboards, capacity planning. | `http_requests_total = 1452` | **+** Fast to query, low storage footprint.<br>**-** Lacks individual transaction context. |
+| **Logs** | Time-stamped text records of discrete events emitted by applications. | Debugging specific failures, auditing. | `[ERROR] User 42 failed DB connection` | **+** High detail and context.<br>**-** High storage cost, slow at scale. |
+| **Traces** | End-to-end request journeys tracked across multiple distributed services. | Profiling latency bottlenecks, dependency mapping. | `API Gateway (10ms) -> Auth (5ms) -> DB (120ms)` | **+** Visualizes request paths.<br>**-** Complex instrumentation overhead. |
 
-Use the following examples:
+### Diagnostic Workflow
+1. **Metric** triggers an alert: *HTTP 500 error rate spiked to 12% on `payments-service`*.
+2. **Trace** pinpoints the bottleneck: *Request failed during the call from `payments-service` to `db-cluster`*.
+3. **Log** identifies the root cause: *`FATAL: Connection pool exhausted at 10:14:02 UTC`*.
 
-### Counter
+---
 
-```promql
-node_cpu_seconds_total
-```
+## 3. Why Prometheus in Cloud-Native Environments?
 
-### Gauge
+Traditional monitoring solutions struggle with ephemeral infrastructure like Kubernetes or cloud-native container runtimes. Prometheus was built specifically for these environments:
 
-```promql
-node_memory_MemAvailable_bytes
-```
+* **Pull-Based Telemetry:** Prometheus actively scrapes targets over HTTP endpoints (`/metrics`). This prevents application targets from needing to know server IPs or overloading ingestion pipelines during traffic spikes.
+* **Dimensional Data Model:** Metrics are identified by name and arbitrary key-value pairs called labels (`http_requests_total{method="POST", status="500"}`), allowing high-granularity aggregation.
+* **Service Discovery:** Native integrations with Kubernetes, AWS, GCP, and Consul dynamically discover and monitor infrastructure components as they scale up or down.
+* **Independent Architecture:** Each Prometheus server is an autonomous, single-node instance that stores data locally, eliminating dependencies on external distributed databases during outages.
+* **PromQL:** A powerful functional query language optimized for real-time mathematical operations over time-series data.
 
-### Histogram
+---
 
-Typical application metric:
-
-```text
-http_request_duration_seconds_bucket
-http_request_duration_seconds_sum
-http_request_duration_seconds_count
-```
-
-### Summary
-
-Typical application metric:
-
-```text
-http_request_duration_seconds{quantile="0.95"}
-```
-
-## Key Exercise
-
-Explain why `rate()` is normally used with counters but not directly with gauges.
+## 4. Prometheus Architecture
