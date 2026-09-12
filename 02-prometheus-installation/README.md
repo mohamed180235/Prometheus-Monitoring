@@ -12,8 +12,14 @@ sudo mkdir -p /var/lib/prometheus
 
 ## 2. Install the Prometheus Binary
 
-Download a current Prometheus Linux AMD64 release from the official Prometheus release page, extract it, and install:
-
+Download a current Prometheus Linux AMD64 release from the official Prometheus release page https://prometheus.io/download/, extract it, and install:
+Download Prometheus
+```bash
+wget https://github.com/prometheus/prometheus/releases/latest/download/prometheus-linux-amd64.tar.gz
+tar -xvf prometheus-linux-amd64.tar.gz
+cd prometheus-*/
+```
+Install Prometheus Binary
 ```bash
 sudo cp prometheus /usr/local/bin/
 sudo cp promtool /usr/local/bin/
