@@ -8,9 +8,15 @@
 - Understand Prometheus architecture
 - Understand Prometheus, exporters, service discovery, Alertmanager, and Grafana
 
-## Demo
+---
 
-Start with the architecture:
+## 1. Introduction to Monitoring & Observability
+
+### What is Monitoring?
+Monitoring is the process of collecting, analyzing, and using information to track a system's health, performance, and availability. It answers the fundamental question: **"Is the system working?"**
+
+### The Shift to Observability
+In dynamic microservice and containerized environments, systems fail in complex, unpredictable ways. **Observability** measures how well internal states can be inferred from external outputs (telemetry). It answers the underlying diagnostic question: **"Why is the system failing?"**
 
 ```text
 Application / Host
