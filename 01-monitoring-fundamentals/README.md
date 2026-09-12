@@ -48,3 +48,19 @@ Traditional monitoring solutions struggle with ephemeral infrastructure like Kub
 ---
 
 ## 4. Prometheus Architecture
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/9f3d104d-29c4-489a-8427-e881057a11f6" />
+
+### Core Components
+* **Prometheus Server:** Scrapes endpoints, evaluates alert rules, and persists data to a local Time Series Database (TSDB).
+* **Pushgateway:** Accepts metrics pushed from short-lived batch jobs that do not live long enough to be scraped directly.
+* **Alertmanager:** Deduplicates, groups, and routes triggered alerts to external systems (Slack, PagerDuty, Email).
+* **Grafana:** Connects to Prometheus via PromQL to render visual operational dashboards.
+
+## 5. Ecosystem Components
+* **Exporters:** Translation proxies that expose non-Prometheus systems (OS, databases, message queues) as readable metrics endpoints.
+  * *Node Exporter:* Hardware and kernel-level Linux OS metrics.
+  * *cAdvisor:* Container resource utilization metrics.
+* **Service Discovery:** Mechanisms that continuously update scrape target endpoints without manual static updates to configuration files.
+* **Alertmanager:** Handles notification routing, suppressing cascading failure noise (inhibition), and silencing during maintenance.
+* **Grafana:** Visualization interface used for charting long-term metrics and monitoring system state.
+---
